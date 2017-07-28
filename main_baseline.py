@@ -6,7 +6,7 @@ from data_loader import get_data, batch_generator
 from keras.callbacks import EarlyStopping, ModelCheckpoint
 from keras.layers import Conv1D, MaxPooling1D, GlobalMaxPooling1D
 from keras import metrics
-from .model_zoo import get_embedding, rnn_model, rnn_att_model, base_model
+from model_zoo import get_embedding, rnn_model, rnn_att_model, base_model
 
 
 # os.environ["CUDA_VISIBLE_DEVICES"] = "2"
