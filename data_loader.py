@@ -21,10 +21,12 @@ from keras import metrics
 
 CHAR_EMBEDDING_FILE = './data/char_embedding.txt'
 WORD_EMBEDDING_FILE = './data/word_embedding.txt'
-TRAIN_DATA_FILE = './data/question_train_set.txt'
+TRAIN_DATA_FILE = './data/question_train_set_split.txt'
+# TRAIN_DATA_FILE = './data/question_train_set.txt'
 TEST_DATA_FILE = './data/question_eval_set.txt'
 TOPIC_INFO_FILE = './data/topic_info.txt'
-TRAIN_LABEL_FILE = './data/question_topic_train_set.txt'
+# TRAIN_LABEL_FILE = './data/question_topic_train_set.txt'
+TRAIN_LABEL_FILE = './data/question_topic_train_set_split.txt'
 # MAX_SEQUENCE_LENGTH = 30
 MAX_NB_CHARS = 10000  # w2v 11973, vocab 12982
 MAX_NB_WORDS = 400000  # w2v 411720, vocab 568825
@@ -204,10 +206,28 @@ def pre_data(fpath=TEST_DATA_FILE):
     return idx, title_char, title_word, des_char, des_word
 
 
+def split_data(TRAIN_DATA_FILE):
+    line = 300000
+    train_split_name = './data/question_train_set_split.txt'
+    label_split_name = './data/question_topic_train_set_split.txt'
+    with open(TRAIN_DATA_FILE) as f:
+        train_split = open(train_split_name, 'w')
+        for x in range(line):
+            train_split.write(next(f))
+        train_split.close()
+
+    with open(TRAIN_LABEL_FILE) as f:
+        label_split = open(label_split_name, 'w')
+        for x in range(line):
+            label_split.write(next(f))
+        label_split.close()
+
+
+
 if __name__ == '__main__':
 
+    # split_data(TRAIN_DATA_FILE)
     ###################
-
     # tokenizer_char, tokenizer_word = get_tokenizer()
     tokenizer_char = pd.read_pickle('./data/input/tokenizer_char_10000.pkl')
     tokenizer_word = pd.read_pickle('./data/input/tokenizer_word_400000.pkl')
@@ -309,7 +329,7 @@ def get_data(USE_FA=True, USE_GLOVE_EMBED=True):
     :param USE_GLOVE_EMBED:
     :return:
     """
-    PATH = '/home/chen/PycharmProjects/zhihu_ksb/input/'
+    PATH = '/home/chen/PycharmProjects/zhihu_ksb/data/input/'
     TRAIN_FILE = ['train_title_word.pkl', 'train_des_word.pkl', 'train_y.pkl']
     VALID_FILE = ['valid_title_word.pkl', 'valid_des_word.pkl', 'valid_y.pkl']
     TEST_FILE = ['test_title_word.pkl', 'test_des_word.pkl']

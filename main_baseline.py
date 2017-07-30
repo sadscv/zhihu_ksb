@@ -12,7 +12,7 @@ from model_zoo import get_embedding, rnn_model, rnn_att_model, base_model
 # os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 # config.device='cuda3'
 def get_testid():
-    f = open('../data/question_eval_set.txt', 'r')
+    f = open('./data/question_eval_set.txt', 'r')
     idx_list = []
     y_labels = []
     for line in f:
@@ -41,7 +41,7 @@ def run():
     SENT_HIDDEN_SIZE = 256
     BATCH_SIZE = 512
     PATIENCE = 6  # 8
-    MAX_EPOCHS = 100
+    MAX_EPOCHS = 3
     MAX_LEN_TITLE = 30
     MAX_LEN_DES = 128
     DP = 0.2
@@ -59,9 +59,9 @@ def run():
 
     LABEL_NUM = len(label_map.classes_)
 
-    bst_model_path = '../model/base_model_v1.hdf5'
-    pred_path = '../res/base_model_v1.pkl'
-    res_path = '../res/base_model_v1.csv'
+    bst_model_path = './data/model/base_model_v1.hdf5'
+    pred_path = './data/res/base_model_v1.pkl'
+    res_path = './data/res/base_model_v1.csv'
 
     embed = get_embedding(embedding_matrix, USE_GLOVE, VOCAB, EMBED_HIDDEN_SIZE,
                           TRAIN_EMBED, None)
@@ -74,7 +74,7 @@ def run():
     # print training[0][0].shape[0],validation[0][0].shape[0]
     # model.load_weights(bst_model_path)
     model.fit_generator(tr_gen, steps_per_epoch=int(training[0][0].shape[0] / BATCH_SIZE) + 1,
-                        epochs=100, verbose=1,
+                        epochs=MAX_EPOCHS, verbose=1,
                         validation_data=te_gen,
                         validation_steps=int(validation[0][0].shape[0] / BATCH_SIZE) + 1, max_q_size=20,
                         callbacks=[early_stopping, model_checkpoint])
